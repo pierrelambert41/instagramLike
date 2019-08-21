@@ -13,9 +13,9 @@ export class AllPostsComponent implements OnInit, OnDestroy {
   allRef: any;
   all: any = [];
   loadMoreRef: any;
-  
+
   constructor(private myFire: MyfireService, private notifier: NotificationService) { }
-  
+
   ngOnInit() {
     this.allRef = firebase.database().ref('allposts').limitToFirst(3);
     this.allRef.on('child_added', data => {
@@ -25,14 +25,14 @@ export class AllPostsComponent implements OnInit, OnDestroy {
       });
     });
   }
-  
+
   onLoadMore() {
     if (this.all.length > 0) {
       const lastLoadedPost = _.last(this.all);
       const lastLoadedPostKey = lastLoadedPost.key;
-      
+
       this.loadMoreRef = firebase.database().ref('allposts').startAt(null, lastLoadedPostKey).limitToFirst(3+1);
-      
+
       this.loadMoreRef.on('child_added', data => {
         if (data.key === lastLoadedPostKey) {
           return;
@@ -45,7 +45,7 @@ export class AllPostsComponent implements OnInit, OnDestroy {
       })
     }
   }
-  
+
   ngOnDestroy() {
     this.allRef.off();
     if (this.loadMoreRef) {
@@ -60,7 +60,18 @@ export class AllPostsComponent implements OnInit, OnDestroy {
     })
     .catch(err => {
       this.notifier.display('error', 'Error adding image to favorites');
-    })
+    });
   }
-  
+
+  onFollowClicked(imageData) {
+    this.myFire.followUser(imageData.uploadedBy)
+    .then(() => {
+      this.notifier.display('success', 'following ' + imageData.uploadedBy.name + "!!!");
+      console.log(imageData.uploadedBy.name)
+    })
+    .catch(err => {
+      this.notifier.display('error', err);
+    });
+  }
+
 }

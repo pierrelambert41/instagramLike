@@ -14,10 +14,12 @@ export class PostComponent implements OnInit {
   @Input() imageName: string;
   @Input() displayPostedBy: boolean = true;
   @Input() displayFavoritesButton: boolean = true;
+  @Input() displayFollowButton: boolean = true;
   defaultImage = "http://via.placeholder.com/150x150";
   imageData: any = {};
 
   @Output() favoriteClicked = new EventEmitter<any>();
+  @Output() followClicked = new EventEmitter<any>();
 
   ngOnInit() {
     const uid = firebase.auth().currentUser.uid;
@@ -28,10 +30,15 @@ export class PostComponent implements OnInit {
         this.imageData = snapshot.val();
         this.defaultImage = this.imageData.fileUrl;
 
-        if(this.imageData.uploadedBy.uid === uid) {
+        if (this.imageData.uploadedBy.uid === uid) {
           this.displayFavoritesButton = false;
+          this.displayFollowButton = false;
         }
       });
+  }
+
+  onFollowClicked() {
+    this.followClicked.emit(this.imageData);
   }
 
   onFavoritesClicked() {

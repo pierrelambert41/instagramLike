@@ -19,6 +19,7 @@ export class FavoritesComponent implements OnInit {
 
     favRef.once('value').then(snapshot => {
       const favoritesObj = snapshot.val();
+      console.log(favoritesObj)
       this.favoritesList = _.values(favoritesObj);
     });
   }
