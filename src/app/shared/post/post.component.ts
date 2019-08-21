@@ -11,12 +11,12 @@ export class PostComponent implements OnInit {
   constructor() { }
 
   @Input() imageName: string;
-  @Input() displayPostedBy: boolean = false;
+  @Input() displayPostedBy: boolean = true;
   defaultImage = "http://via.placeholder.com/150x150";
   imageData: any = {};
 
   ngOnInit() {
-    firebase.database().ref('image').child(this.imageName)
+    firebase.database().ref('images').child(this.imageName)
       .once('value')
       .then(snapshot => {
         this.imageData = snapshot.val();

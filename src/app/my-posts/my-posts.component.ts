@@ -41,4 +41,8 @@ export class MyPostsComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    this.personalPostsRef.off();
+  }
+
 }
