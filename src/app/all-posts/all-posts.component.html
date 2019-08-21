@@ -12,6 +12,7 @@
       <div class="image-container">
         <app-post *ngFor="let post of all"
         [imageName]="post.data.name"
+        (favoriteClicked)="onFavoritesClicked($event)"
         >
       </app-post>
     </div>
